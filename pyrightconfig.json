@@ -1,0 +1,33 @@
+{
+  "typeCheckingMode": "strict",
+  "pythonVersion": "3.10",
+  "reportUnknownMemberType": "none",
+  "reportMissingTypeStubs": "none",
+  "reportUnknownVariableType": "none",
+  "reportUnknownArgumentType": "none",
+  "reportUnusedImport": "information",
+  "exclude": [
+    "**/node_modules",
+    "**/dist",
+    "**/build",
+    "**/venv",
+    "**/env",
+    "**/migrations",
+    "**/tests",
+    "**/test",
+    "**/docs",
+    "**/examples",
+    "**/samples",
+    "**/scripts",
+    "**/data",
+    "**/assets",
+    "**/static",
+    "**/public",
+    "**/templates",
+    "**/schema",
+    "**/schemas",
+    "**/.ipynb_checkpoints",
+    "labs/utils/cma.py",
+    "labs/lab10/utils_10/deapCoev/"
+  ]
+}
