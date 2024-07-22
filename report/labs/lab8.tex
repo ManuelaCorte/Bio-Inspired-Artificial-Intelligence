@@ -1,0 +1,29 @@
+\subsection{Exercise 1}
+\subsubsection*{Or}
+Using standard parameters
+\subsubsection*{And}
+Stuck at fitness 0.012 even changing parameters --> change in topology adding a hidden node
+\subsubsection*{Xor}
+Need to add nodes in the hidden layer since non linearly separable problem (2 hidden nodes.
+We can write the Xor as a XOR b = (a AND NOT b)OR(b AND NOT a)
+the two hidden nodes are the two possible configurations of the or
+
+With standard parameters best solution has early convergence to bad overall fitness value (0.668191835386526) --> bigger / more frequent mutation to prevent best solution from getting stuck (0.8 mutation rate) 
+\subsection{Exercise 2}
+\subsubsection*{Temporal Or}
+Using a recurrent architecture allows us to take into consideration local structure in the sequence of inputs (in our case a temporal sequence) while each execution of a standard FFNN is only concerned with its current inputs
+
+\subsubsection*{Temporal And}
+Same parameters as temporal or (maybe because the problem is easy enough that we don't need to be too precise in the es parameters?)
+
+\subsubsection*{Temporal Xor}
+\subsection{Exercise 3}
+\subsubsection*{No elitism}
+Doesn't converge in standard setting
+
+\subsubsection*{Elitism}
+Reaches fitness threshold after 36 generations
+Elitism in speciation probably helps retaining very promising species (and thus well performing topologies) and also keeping the number of species that compete lower
+
+Both cases starting with a more complex topology (hidden layer with one node gives worse results)
+\subsection{Exercise 4}
