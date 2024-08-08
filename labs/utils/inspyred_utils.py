@@ -79,7 +79,20 @@ class CombinedObjectives(Pareto):
         else:
             weights = np.asarray([1 for _ in pareto.values])
 
-        self.fitness = sum(np.asarray(pareto.values) * weights)
+        if "combination_strategy" not in args:
+            self.fitness = sum(np.asarray(pareto.values) * weights)
+        elif args["combination_strategy"] == "sum":
+            self.fitness = sum(np.asarray(pareto.values) * weights)
+        elif args["combination_strategy"] == "product":
+            self.fitness = int(np.prod(np.asarray(pareto.values)))
+        elif args["combination_strategy"] == "power":
+            self.fitness = sum(np.asarray(pareto.values) ** weights)
+        elif args["combination_strategy"] == "division":
+            self.fitness = sum(
+                np.asarray([1 / value for value in pareto.values]) * weights
+            )
+        else:
+            raise ValueError("Invalid combination strategy")
 
     def __lt__(self, other: Self) -> bool:
         return self.fitness < other.fitness

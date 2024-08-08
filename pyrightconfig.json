@@ -28,6 +28,6 @@
     "**/schemas",
     "**/.ipynb_checkpoints",
     "labs/utils/cma.py",
-    "labs/lab10/utils_10/deapCoev/"
+    "labs/lab10/deapCoev/"
   ]
 }

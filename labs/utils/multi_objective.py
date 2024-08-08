@@ -127,7 +127,7 @@ def run_ga(
     if display and num_vars == 2:
         algorithm.observer = [plot_observer, initial_pop_observer]  # type: ignore
     else:
-        algorithm.observer = [plot_observer]  # type: ignore
+        algorithm.observer = [initial_pop_observer]  # type: ignore
 
     kwargs["num_selected"] = kwargs["pop_size"]
     if use_bounder:

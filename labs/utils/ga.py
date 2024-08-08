@@ -122,7 +122,10 @@ def run_ga(
 
     kwargs["num_selected"] = kwargs["pop_size"]
 
-    problem = problem_class(num_vars)
+    if "use_penalty" in kwargs:
+        problem = problem_class(num_vars, use_penalty=kwargs["use_penalty"])
+    else:
+        problem = problem_class(num_vars)
 
     if use_bounder:
         kwargs["bounder"] = problem.bounder

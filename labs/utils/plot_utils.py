@@ -73,7 +73,7 @@ def plot_results_2D(
     title_2: str,
     args: dict[str, Any],
 ):
-    fig = plt.figure(args["fig_title"] + " (initial and final population)")
+    fig = plt.figure()
     ax1 = fig.add_subplot(2, 1, 1, aspect="equal")
     ax1.plot(individuals_1[:, 0], individuals_1[:, 1], ".b", markersize=7)
     lim = max(
@@ -89,6 +89,7 @@ def plot_results_2D(
         + np.array(list(map(abs, ax2.get_ylim())))
     )
 
+    fig.suptitle(args["fig_title"] + " (initial and final population)")
     ax1.set_xlim(-lim, lim)
     ax1.set_ylim(-lim, lim)
     ax1.set_title(title_1)
@@ -557,7 +558,7 @@ def draw_net(
                 a, b, _attributes={"style": style, "color": color, "penwidth": width}
             )
 
-    dot.render(filename, view=view)
+    dot.render(filename, directory="results", view=view)
 
     return dot
 

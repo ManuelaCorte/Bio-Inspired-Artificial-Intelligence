@@ -1,5 +1,5 @@
 import math
-from typing import Any
+from typing import Any, Optional
 
 from inspyred import ec
 from inspyred.benchmarks import Benchmark
@@ -25,8 +25,6 @@ class ConstrainedBenchmark(Benchmark):
         raise NotImplementedError("The constraintsEvaluator method must be overridden.")
 
 
-usePenalty = True
-
 # -----------------------------------------------------------------------
 #                 SINGLE-OBJECTIVE CONSTRAINED PROBLEMS
 # -----------------------------------------------------------------------
@@ -40,11 +38,21 @@ usePenalty = True
 
 
 class RosenbrockCubicLine(ConstrainedBenchmark):
-    def __init__(self, dimensions: int = 2):
+    def __init__(
+        self,
+        dimensions: int = 2,
+        use_penalty: bool = True,
+        bounder: Optional[list[list[float]]] = None,
+    ):
         Benchmark.__init__(self, dimensions)
-        self.bounder = ec.Bounder([-1.5, -0.5], [1.5, 2.5])
+        self.bounder = (
+            ec.Bounder([-1.5, -0.5], [1.5, 2.5])
+            if bounder is None
+            else ec.Bounder(*bounder)
+        )
         self.maximize = False
         self.global_optimum = [1 for _ in range(self.dimensions)]
+        self.use_penalty = use_penalty
 
     def generator(
         self, random: NumpyRandomWrapper, args: dict[str, Any]
@@ -57,7 +65,7 @@ class RosenbrockCubicLine(ConstrainedBenchmark):
         fitness = []
         for c in candidates:
             f = self.f(c[0], c[1])
-            if usePenalty:
+            if self.use_penalty:
                 # penalty function (note that in this case we are minimizing, so we add a positive value)
                 g1 = self.g1(c[0], c[1])  # <=0
                 g2 = self.g2(c[0], c[1])  # <=0
@@ -99,11 +107,21 @@ class RosenbrockCubicLine(ConstrainedBenchmark):
 
 
 class RosenbrockDisk(ConstrainedBenchmark):
-    def __init__(self, dimensions: int = 2):
+    def __init__(
+        self,
+        dimensions: int = 2,
+        use_penalty: bool = True,
+        bounder: Optional[list[list[float]]] = None,
+    ):
         Benchmark.__init__(self, dimensions)
-        self.bounder = ec.Bounder([-1.5, -1.5], [1.5, 1.5])
+        self.bounder = (
+            ec.Bounder([-1.5, -1.5], [1.5, 1.5])
+            if bounder is None
+            else ec.Bounder(*bounder)
+        )
         self.maximize = False
         self.global_optimum = [1 for _ in range(self.dimensions)]
+        self.use_penalty = use_penalty
 
     def generator(
         self, random: NumpyRandomWrapper, args: dict[str, Any]
@@ -116,7 +134,7 @@ class RosenbrockDisk(ConstrainedBenchmark):
         fitness = []
         for c in candidates:
             f = self.f(c[0], c[1])
-            if usePenalty:
+            if self.use_penalty:
                 # penalty function (note that in this case we are minimizing, so we add a positive value)
                 g1 = self.g1(c[0], c[1])  # <=0
                 if g1 > 0:
@@ -151,11 +169,21 @@ class RosenbrockDisk(ConstrainedBenchmark):
 
 
 class MishraBirdConstrained(ConstrainedBenchmark):
-    def __init__(self, dimensions: int = 2):
+    def __init__(
+        self,
+        dimensions: int = 2,
+        use_penalty: bool = True,
+        bounder: Optional[list[list[float]]] = None,
+    ):
         Benchmark.__init__(self, dimensions)
-        self.bounder = ec.Bounder([-10.0, -6.5], [0.0, 0.0])
+        self.bounder = (
+            ec.Bounder([-10.0, -6.5], [0.0, 0.0])
+            if bounder is None
+            else ec.Bounder(*bounder)
+        )
         self.maximize = False
         self.global_optimum = [-3.1302468, -1.5821422]
+        self.use_penalty = use_penalty
 
     def generator(
         self, random: NumpyRandomWrapper, args: dict[str, Any]
@@ -168,7 +196,7 @@ class MishraBirdConstrained(ConstrainedBenchmark):
         fitness = []
         for c in candidates:
             f = self.f(c[0], c[1])
-            if usePenalty:
+            if self.use_penalty:
                 # penalty function (note that in this case we are minimizing, so we add a positive value)
                 g1 = self.g1(c[0], c[1])  # <=0
                 if g1 > 0:
@@ -207,11 +235,21 @@ class MishraBirdConstrained(ConstrainedBenchmark):
 
 
 class Townsend(ConstrainedBenchmark):
-    def __init__(self, dimensions: int = 2):
+    def __init__(
+        self,
+        dimensions: int = 2,
+        use_penalty: bool = True,
+        bounder: Optional[list[list[float]]] = None,
+    ):
         Benchmark.__init__(self, dimensions)
-        self.bounder = ec.Bounder([-2.25, -2.5], [2.5, 1.75])
+        self.bounder = (
+            ec.Bounder([-2.25, -2.5], [2.5, 1.75])
+            if bounder is None
+            else ec.Bounder(*bounder)
+        )
         self.maximize = False
         self.global_optimum = [2.0052938, 1.1944509]
+        self.use_penalty = use_penalty
 
     def generator(
         self, random: NumpyRandomWrapper, args: dict[str, Any]
@@ -224,7 +262,7 @@ class Townsend(ConstrainedBenchmark):
         fitness: list[float] = []
         for c in candidates:
             f = self.f(c[0], c[1])
-            if usePenalty:
+            if self.use_penalty:
                 # penalty function (note that in this case we are minimizing, so we add a positive value)
                 g1 = self.g1(c[0], c[1])  # <=0
                 if g1 > 0:
@@ -271,12 +309,22 @@ class Townsend(ConstrainedBenchmark):
 
 
 class Simionescu(ConstrainedBenchmark):
-    def __init__(self, dimensions: int = 2):
+    def __init__(
+        self,
+        dimensions: int = 2,
+        use_penalty: bool = True,
+        bounder: Optional[list[list[float]]] = None,
+    ):
         Benchmark.__init__(self, dimensions)
-        self.bounder = ec.Bounder([-1.25, -1.25], [1.25, 1.25])
+        self.bounder = (
+            ec.Bounder([-1.25, -1.25], [1.25, 1.25])
+            if bounder is None
+            else ec.Bounder(*bounder)
+        )
         self.maximize = False
         self.global_optimum = (0.84852813, -0.84852813)
         # self.global_optimum = (-0.84852813,0.84852813)
+        self.use_penalty = use_penalty
 
     def generator(
         self, random: NumpyRandomWrapper, args: dict[str, Any]
@@ -289,7 +337,7 @@ class Simionescu(ConstrainedBenchmark):
         fitness: list[float] = []
         for c in candidates:
             f = self.f(c[0], c[1])
-            if usePenalty:
+            if self.use_penalty:
                 # penalty function (note that in this case we are minimizing, so we add a positive value)
                 g1 = self.g1(c[0], c[1])  # <=0
                 if g1 > 0:
@@ -330,17 +378,25 @@ class Simionescu(ConstrainedBenchmark):
 
 
 class SphereCircle(ConstrainedBenchmark):
-    def __init__(self, dimensions: int = 2):
+    def __init__(
+        self,
+        dimensions: int = 2,
+        use_penalty: bool = True,
+        bounder: Optional[list[list[float]]] = None,
+    ):
         Benchmark.__init__(self, dimensions)
-        self.bounder = ec.Bounder([-5.12] * self.dimensions, [5.12] * self.dimensions)
-        # self.bounder = ec.Bounder([-20] * self.dimensions, [20] * self.dimensions)
+        self.bounder = (
+            ec.Bounder([-5.12] * self.dimensions, [5.12] * self.dimensions)
+            if bounder is None
+            else ec.Bounder(*bounder)
+        )
         self.maximize = True
+        self.use_penalty = use_penalty
 
     def generator(
         self, random: NumpyRandomWrapper, args: dict[str, Any]
     ) -> list[float]:
         return [random.uniform(-5.12, 5.12) for _ in range(self.dimensions)]
-        # return [random.uniform(-20, 20) for _ in range(self.dimensions)]
 
     # implements the penalty function
     def evaluator(
@@ -349,11 +405,12 @@ class SphereCircle(ConstrainedBenchmark):
         fitness: list[float] = []
         for c in candidates:
             f = self.f(c[0], c[1])
-            if usePenalty:
+            if self.use_penalty:
                 # penalty function (note that in this case we are maximizing, so penalty must be negative)
                 g1 = self.g1(c[0], c[1])  # <=0
                 if g1 > 0:
-                    f = -1  # try to change this penalty function to handle larger search spaces
+                    # try to change this penalty function to handle larger search spaces
+                    f = (self.bounder.upper_bound[0] - self.bounder.lower_bound[0]) * g1  # type: ignore
             fitness.append(f)
         return fitness
 
@@ -392,75 +449,3 @@ class SphereCircle(ConstrainedBenchmark):
             print("(unfeasible)")
         else:
             print("(feasible)")
-
-
-# -----------------------------------------------------------------------
-
-
-class SphereConstrained(ConstrainedBenchmark):
-    def __init__(self, dimensions: int = 2):
-        Benchmark.__init__(self, dimensions)
-        self.bounder = ec.Bounder([-5.12] * self.dimensions, [5.12] * self.dimensions)
-        self.maximize = False
-        self.global_optimum = [0 for _ in range(self.dimensions)]
-
-    def generator(
-        self, random: NumpyRandomWrapper, args: dict[str, Any]
-    ) -> list[float]:
-        return [random.uniform(-5.12, 5.12) for _ in range(self.dimensions)]
-
-    def evaluator(
-        self, candidates: list[list[float]], args: dict[str, Any]
-    ) -> list[float]:
-        fitness: list[float] = []
-        for c in candidates:
-            f = self.f(c[0], c[1])
-            if usePenalty:
-                pass  # Change this line to handle penalty function
-                # penalty function (note that in this case we are minimizing, so we add a positive value)
-                # g1 = self.g1(c[0],c[1]) # <=0
-                # g2 = self.g2(c[0],c[1]) # <=0
-                # ...
-                # if g1 > 0 or g2 > 0 or ...:
-                #    f = f + ...
-            fitness.append(f)
-        return fitness
-
-    def constraintsEvaluator(
-        self, candidates: list[list[float]], args: dict[str, Any]
-    ) -> list[list[float]]:
-        constraints: list[list[float]] = []
-        for _ in candidates:
-            pass
-            # Change this part to evaluate the constraints
-            # g1 = self.g1(c[0],c[1]) # <=0
-            # g2 = self.g2(c[0],c[1]) # <=0
-            # ...
-            # constraints.append([g1,g2,...])
-        return constraints
-
-    def f(self, x: float, y: float) -> float:
-        return x**2 + y**2
-
-    # Implement here some constraints
-    """
-    def g1(self,x,y):
-        return ...
-   
-    def g1(self,x,y):
-        return ...
-    """
-
-    def printSolution(self, c: list[float]):
-        f = self.f(c[0], c[1])
-        # g1 = self.g1(c[0],c[1])
-        # g2 = self.g2(c[0],c[1])
-        print("f  =", f)
-        """
-        print("g1 =", g1)
-        print("g2 =", g2)
-        if g1 > 0: or g2 > 0:
-            print("(unfeasible)")
-        else:
-            print("(feasible)")
-        """
