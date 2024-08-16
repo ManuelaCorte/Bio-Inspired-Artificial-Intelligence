@@ -114,7 +114,7 @@ def run_ga(
     maximize: bool = False,
     use_bounder: bool = True,
     **kwargs: Any,
-) -> tuple[NDArray[np.float64], NDArray[np.float64]]:
+) -> tuple[NDArray[np.float64], NDArray[np.float64], NDArray[np.float64]]:
     """Run a GA on the given problem"""
     # create dictionaries to store data about initial population, and lines
     initial_pop_storage = {}
@@ -179,4 +179,4 @@ def run_ga(
                 kwargs,
             )
 
-    return best_guy, best_fitness
+    return best_guy, best_fitness, final_pop_fitnesses

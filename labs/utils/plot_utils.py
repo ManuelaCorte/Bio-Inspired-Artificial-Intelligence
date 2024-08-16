@@ -1,5 +1,5 @@
 import copy
-from typing import Any
+from typing import Any, Optional
 
 import graphviz
 import inspyred.ec.analysis
@@ -260,6 +260,31 @@ def plot_results_multi_objective_PF(individuals: list[Individual], title: str):
                 axes[i, j].set_ylabel("f" + str(i))  # type: ignore
         f.subplots_adjust(hspace=0.30)
         f.subplots_adjust(wspace=0.30)
+
+
+def plot_pareto_front(
+    final_pop_fitnesses: NDArray[np.float64],
+    title: str,
+    function_labels: Optional[tuple[str, str]] = None,
+) -> None:
+    plt.scatter(
+        final_pop_fitnesses.T[0],
+        final_pop_fitnesses.T[1],
+        color="red",
+        label="Pareto front",
+    )
+
+    if not function_labels:
+        plt.xlabel("f1")
+        plt.ylabel("f2")
+    else:
+        plt.xlabel(function_labels[0])
+        plt.ylabel(function_labels[1])
+
+    plt.title(title)
+    plt.legend(loc="upper right")
+    plt.legend()
+    plt.show()
 
 
 """

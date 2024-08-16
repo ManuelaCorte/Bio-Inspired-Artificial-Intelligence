@@ -1,4 +1,4 @@
-Inner Radius (mm),Outer Radius (mm),Disk Thicknes (mm),Force (N),N. Disks,Mass (kg),Stopping Time (s)
+Inner Radius (mm), Outer Radius (mm), Disk Thicknes (mm), Force (N), N. Disks, Mass (kg), Stopping Time (s)
 80.0,90.0,1.5,1000.0,2.0,0.18745883363970295,16.344252899546277
 80.0,110.0,1.5,1000.0,9.0,2.0951281406790327,3.317331881291514
 80.0,93.0,1.5,1000.0,2.0,0.24799700991511292,16.059016922159064

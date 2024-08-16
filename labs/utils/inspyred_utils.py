@@ -81,16 +81,15 @@ class CombinedObjectives(Pareto):
 
         if "combination_strategy" not in args:
             self.fitness = sum(np.asarray(pareto.values) * weights)
+            print("No combination strategy provided, defaulting to sum")
         elif args["combination_strategy"] == "sum":
             self.fitness = sum(np.asarray(pareto.values) * weights)
         elif args["combination_strategy"] == "product":
             self.fitness = int(np.prod(np.asarray(pareto.values)))
         elif args["combination_strategy"] == "power":
             self.fitness = sum(np.asarray(pareto.values) ** weights)
-        elif args["combination_strategy"] == "division":
-            self.fitness = sum(
-                np.asarray([1 / value for value in pareto.values]) * weights
-            )
+        elif args["combination_strategy"] == "minimum":
+            self.fitness = min(np.asarray(pareto.values) * weights)
         else:
             raise ValueError("Invalid combination strategy")
 
