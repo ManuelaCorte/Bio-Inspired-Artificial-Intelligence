@@ -296,7 +296,8 @@ def run_es(
     kwargs["num_selected"] = kwargs["pop_size"]
     problem = problem_class(num_vars)
     if use_bounder:
-        kwargs["bounder"] = problem.bounder
+        if "bounder" not in kwargs:
+            kwargs["bounder"] = problem.bounder
     if "pop_init_range" in kwargs:
         kwargs["generator"] = generator
     else:

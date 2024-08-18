@@ -93,6 +93,9 @@ class RosenbrockCubicLine(ConstrainedBenchmark):
     def g2(self, x: float, y: float) -> float:
         return x + y - 2
 
+    def penalty(self, x: float, y: float) -> float:
+        return max(0, self.g1(x, y)) + max(0, self.g2(x, y))
+
     def printSolution(self, c: list[float]):
         f = self.f(c[0], c[1])
         g1 = self.g1(c[0], c[1])
@@ -156,6 +159,9 @@ class RosenbrockDisk(ConstrainedBenchmark):
 
     def g1(self, x: float, y: float) -> float:
         return x**2 + y**2 - 2
+
+    def penalty(self, x: float, y: float) -> float:
+        return max(0, self.g1(x, y))
 
     def printSolution(self, c: list[float]):
         f = self.f(c[0], c[1])
@@ -222,6 +228,9 @@ class MishraBirdConstrained(ConstrainedBenchmark):
 
     def g1(self, x: float, y: float) -> float:
         return (x + 5) ** 2 + (y + 5) ** 2 - 25
+
+    def penalty(self, x: float, y: float) -> float:
+        return max(0, self.g1(x, y))
 
     def printSolution(self, c: list[float]):
         f = self.f(c[0], c[1])
@@ -297,6 +306,9 @@ class Townsend(ConstrainedBenchmark):
             - (2 * math.sin(t)) ** 2
         )
 
+    def penalty(self, x: float, y: float) -> float:
+        return max(0, self.g1(x, y))
+
     def printSolution(self, c: list[float]):
         f = self.f(c[0], c[1])
         g1 = self.g1(c[0], c[1])
@@ -363,6 +375,9 @@ class Simionescu(ConstrainedBenchmark):
         n = 8
         return x**2 + y**2 - (rt + rs * math.cos(n * math.atan(x / y))) ** 2
 
+    def penalty(self, x: float, y: float) -> float:
+        return max(0, self.g1(x, y))
+
     def printSolution(self, c: list[float]):
         f = self.f(c[0], c[1])
         g1 = self.g1(c[0], c[1])
@@ -409,8 +424,9 @@ class SphereCircle(ConstrainedBenchmark):
                 # penalty function (note that in this case we are maximizing, so penalty must be negative)
                 g1 = self.g1(c[0], c[1])  # <=0
                 if g1 > 0:
+                    f = -g1
                     # try to change this penalty function to handle larger search spaces
-                    f = (self.bounder.upper_bound[0] - self.bounder.lower_bound[0]) * g1  # type: ignore
+                    # f = (self.bounder.upper_bound[0] - self.bounder.lower_bound[0]) * g1  # type: ignore
             fitness.append(f)
         return fitness
 
@@ -439,6 +455,9 @@ class SphereCircle(ConstrainedBenchmark):
 
     def g1(self, x: float, y: float) -> float:
         return x**2 + y**2 - 1
+
+    def penalty(self, x: float, y: float) -> float:
+        return max(0, self.g1(x, y))
 
     def printSolution(self, c: list[float]):
         f = self.f(c[0], c[1])
