@@ -1,5 +1,6 @@
 import copy
-from typing import Any, Optional
+import os
+from typing import Any, Callable, Optional
 
 import graphviz
 import inspyred.ec.analysis
@@ -630,3 +631,54 @@ def plotTree(
     nx.draw_networkx_edges(g, pos)
     nx.draw_networkx_labels(g, pos, labels)
     plt.savefig(folder + "/" + "tree_" + name + ".png")
+
+
+def plot_symbolic_regression_fit(
+    toolbox: Any,
+    expression: Any,
+    logbook: Optional[Any],
+    generatorFunction: Callable[[float], float],
+    folder: Optional[str] = None,
+):
+    if folder is not None and not os.path.exists(folder):  # type: ignore
+        os.makedirs(folder)
+    if logbook is not None:
+        gen = logbook.select("gen")
+        fit_mins = logbook.chapters["fitness"].select("min")
+        size_avgs = logbook.chapters["size"].select("avg")
+
+        fig = plt.figure("GP (fitness and tree size trend)")
+        ax1 = fig.add_subplot(111)
+        line1 = ax1.plot(gen, fit_mins, "b-", label="Minimum Fitness")
+        ax1.set_xlabel("Generation")
+        ax1.set_ylabel("Fitness", color="b")
+        for tl in ax1.get_yticklabels():
+            tl.set_color("b")
+
+        ax2 = ax1.twinx()
+        line2 = ax2.plot(gen, size_avgs, "r-", label="Average Size")  # type: ignore
+        ax2.set_ylabel("Size", color="r")
+        for tl in ax2.get_yticklabels():
+            tl.set_color("r")
+
+        lns = line1 + line2
+        labs = [ln.get_label() for ln in lns]
+        ax2.legend(lns, labs, loc=0)  # type: ignore
+
+        if folder is not None:
+            plt.savefig(folder + "/" + "trends_symbreg.png")
+
+    # plot real vs approximated values
+    x_ = np.linspace(-10, 10, 400)
+    y_real = [generatorFunction(x) for x in x_]
+    gpFunction = toolbox.compile(expr=expression)  # type: ignore
+    y_gp = [gpFunction(x) for x in x_]
+    fig = plt.figure("GP (real vs approximated values)")
+    ax = fig.add_subplot(111)
+    line1 = ax.plot(x_, y_real, label="Real")
+    line2 = ax.plot(x_, y_gp, label="GP")
+    ax.set_xlabel("x")
+    ax.set_ylabel("y")
+    ax.legend()
+    if folder is not None:
+        plt.savefig(folder + "/" + "values_symbreg.png")
